@@ -19,12 +19,12 @@ public class FastEatConfig {
         EAT_DURATION = builder
                 .comment("Time required to eat food, in ticks.")
                 .comment("Minimum: 1")
-                .defineInRange("eatDuration", 2, 1, 72000);
+                .defineInRange("eatDuration", 1, 1, 72000);
 
         DRINK_DURATION = builder
                 .comment("Time required to drink items, in ticks.")
                 .comment("Minimum: 1")
-                .defineInRange("drinkDuration", 2, 1, 72000);
+                .defineInRange("drinkDuration", 1, 1, 72000);
 
         NO_SLOWDOWN = builder
                 .comment("Prevent movement slowdown while consuming items.")
