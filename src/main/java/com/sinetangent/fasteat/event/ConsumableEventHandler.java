@@ -1,8 +1,11 @@
 package com.sinetangent.fasteat.event;
 
 import com.sinetangent.fasteat.FastEat;
+import com.sinetangent.fasteat.config.FastEatConfig;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,14 +20,18 @@ public class ConsumableEventHandler {
 
         UseAnim useAnim = item.getUseAnimation();
 
-        if (useAnim == UseAnim.EAT || useAnim == UseAnim.DRINK) {
+        if (useAnim == UseAnim.EAT) {
 
-            event.setDuration(2);
-
-            FastEat.LOGGER.info(
-                    "Fast consuming: {}",
-                    item.getDescriptionId()
+            event.setDuration(
+                    FastEatConfig.EAT_DURATION.get()
             );
+
+        } else if (useAnim == UseAnim.DRINK) {
+
+            event.setDuration(
+                    FastEatConfig.DRINK_DURATION.get()
+            );
+
         }
     }
 }
