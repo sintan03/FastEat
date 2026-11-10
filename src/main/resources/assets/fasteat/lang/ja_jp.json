@@ -1,0 +1,29 @@
+{
+  "key.fasteat.toggle": "FastEatの有効・無効を切り替え",
+  "key.categories.fasteat": "FastEat",
+
+  "message.fasteat.enabled": "FastEatを有効にしました。",
+  "message.fasteat.disabled": "FastEatを無効にしました。",
+  "message.fasteat.toggled": "FastEatを%sにしました。",
+
+  "message.fasteat.status.title": "===== FastEat 設定 =====",
+  "message.fasteat.status.enabled": "FastEat: %s",
+
+  "message.fasteat.duration.food": "食べ物の消費時間: %s",
+  "message.fasteat.duration.drink": "飲み物の消費時間: %s",
+  "message.fasteat.duration.all.changed": "食べ物・飲み物の消費時間を%sに変更しました。",
+  "message.fasteat.duration.food.changed": "食べ物の消費時間を%sに変更しました。",
+  "message.fasteat.duration.drink.changed": "飲み物の消費時間を%sに変更しました。",
+  "message.fasteat.duration.value": "%s ticks (%s秒)",
+
+  "message.fasteat.no_slowdown": "移動速度補正: %s",
+  "message.fasteat.no_slowdown.changed": "移動速度補正を%sにしました。",
+
+  "message.fasteat.once_per_click": "連続消費制限: %s",
+  "message.fasteat.once_per_click.changed": "連続消費制限を%sにしました。",
+
+  "message.fasteat.enabled_text": "有効",
+  "message.fasteat.disabled_text": "無効",
+
+  "message.fasteat.actionbar": "FastEat: %s"
+}

@@ -1,7 +1,11 @@
 package com.sinetangent.fasteat.event;
 
 import com.sinetangent.fasteat.FastEat;
-import com.sinetangent.fasteat.config.FastEatConfig;
+import com.sinetangent.fasteat.client.FastEatClientSettings;
+import com.sinetangent.fasteat.client.FastEatKeyBindings;
+import com.sinetangent.fasteat.network.ConsumeOnceResetPacket;
+import com.sinetangent.fasteat.network.NetworkHandler;
+import com.sinetangent.fasteat.network.ToggleFastEatPacket;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
@@ -21,9 +25,23 @@ import net.minecraftforge.fml.common.Mod;
 )
 public class ClientEventHandler {
 
+    /**
+     * 現在の右クリック押下中に
+     * すでに食料・飲料を1回消費したか
+     */
     private static boolean consumedThisClick = false;
+
+    /**
+     * 前Tickで右クリックが押されていたか
+     */
     private static boolean useWasDown = false;
+
+    /**
+     * 現在の右クリックを
+     * FastEatによってブロックしているか
+     */
     private static boolean blockedUseKey = false;
+
 
     // ========================
     // No Slowdown
@@ -32,7 +50,10 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void onMovementInput(MovementInputUpdateEvent event) {
 
-        if (!FastEatConfig.NO_SLOWDOWN.get()) {
+        if (
+                !FastEatClientSettings.isEnabled()
+                        || !FastEatClientSettings.isNoSlowdown()
+        ) {
             return;
         }
 
@@ -67,9 +88,13 @@ public class ClientEventHandler {
     // ========================
 
     @SubscribeEvent
-    public static void onItemUseFinish(LivingEntityUseItemEvent.Finish event) {
-
-        if (!FastEatConfig.CONSUME_ONCE_PER_CLICK.get()) {
+    public static void onItemUseStart(
+            LivingEntityUseItemEvent.Start event
+    ) {
+        if (
+                !FastEatClientSettings.isEnabled()
+                        || !FastEatClientSettings.isConsumeOncePerClick()
+        ) {
             return;
         }
 
@@ -79,20 +104,33 @@ public class ClientEventHandler {
             return;
         }
 
-        ItemStack item = event.getItem();
-        UseAnim useAnim = item.getUseAnimation();
-
-        if (isConsumableAnimation(useAnim)) {
-            consumedThisClick = true;
+        if (!isConsumableAnimation(
+                event.getItem().getUseAnimation()
+        )) {
+            return;
         }
+
+        // すでに使用済みならキャンセル
+        if (blockedUseKey) {
+            event.setCanceled(true);
+            return;
+        }
+
+        // 使用開始時点で使用済みにする
+        consumedThisClick = true;
+        blockedUseKey = true;
     }
 
+
+
     // ========================
-    // Reset when right-click released
+    // Input state
     // ========================
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(
+            TickEvent.ClientTickEvent event
+    ) {
 
         if (event.phase != TickEvent.Phase.END) {
             return;
@@ -104,29 +142,68 @@ public class ClientEventHandler {
             return;
         }
 
-        boolean physicalUseDown = minecraft.mouseHandler.isRightPressed();
+        // ------------------------
+        // FastEatの有効・無効切り替え
+        // ------------------------
 
-        // 実際に右クリックを離した
-        if (!physicalUseDown) {
+        while (FastEatKeyBindings.TOGGLE_FAST_EAT.consumeClick()) {
 
+            NetworkHandler.CHANNEL.sendToServer(
+                    new ToggleFastEatPacket()
+            );
+        }
+
+        boolean useDown = minecraft.options.keyUse.isDown();
+
+        // FastEatまたはConsume Once Per Clickが無効なら
+        // クライアント側の制御状態を解除
+        if (
+                !FastEatClientSettings.isEnabled()
+                        || !FastEatClientSettings.isConsumeOncePerClick()
+        ) {
             consumedThisClick = false;
             blockedUseKey = false;
+        }
+
+
+        // ------------------------
+        // 右クリックを離した
+        // ------------------------
+
+        if (!useDown) {
+
+            if (useWasDown) {
+
+                consumedThisClick = false;
+                blockedUseKey = false;
+
+                NetworkHandler.CHANNEL.sendToServer(
+                        new ConsumeOnceResetPacket()
+                );
+            }
+
+            useWasDown = false;
 
             return;
         }
 
-        // 1個消費した後、まだ右クリックを押している
+
+        // ------------------------
+        // 右クリックを押している
+        // ------------------------
+
+        useWasDown = true;
+
+
+        // 1個消費済みなら、
+        // この押下中は使用を開始させない
         if (
-                FastEatConfig.CONSUME_ONCE_PER_CLICK.get()
+                FastEatClientSettings.isEnabled()
+                        && FastEatClientSettings.isConsumeOncePerClick()
                         && consumedThisClick
         ) {
-
-            minecraft.options.keyUse.setDown(false);
-
             blockedUseKey = true;
         }
-
-        useWasDown = physicalUseDown;
     }
 
 
@@ -134,7 +211,9 @@ public class ClientEventHandler {
     // Utility
     // ========================
 
-    private static boolean isConsumableAnimation(UseAnim useAnim) {
+    private static boolean isConsumableAnimation(
+            UseAnim useAnim
+    ) {
 
         return useAnim == UseAnim.EAT
                 || useAnim == UseAnim.DRINK;

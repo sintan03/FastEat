@@ -1,0 +1,29 @@
+{
+  "key.fasteat.toggle": "Toggle FastEat",
+  "key.categories.fasteat": "FastEat",
+
+  "message.fasteat.enabled": "FastEat has been enabled.",
+  "message.fasteat.disabled": "FastEat has been disabled.",
+  "message.fasteat.toggled": "FastEat has been %s.",
+
+  "message.fasteat.status.title": "===== FastEat Settings =====",
+  "message.fasteat.status.enabled": "FastEat: %s",
+
+  "message.fasteat.duration.food": "Food consumption time: %s",
+  "message.fasteat.duration.drink": "Drink consumption time: %s",
+  "message.fasteat.duration.all.changed": "Food and drink consumption times have been changed to %s.",
+  "message.fasteat.duration.food.changed": "Food consumption time has been changed to %s.",
+  "message.fasteat.duration.drink.changed": "Drink consumption time has been changed to %s.",
+  "message.fasteat.duration.value": "%s ticks (%s seconds)",
+
+  "message.fasteat.no_slowdown": "No slowdown: %s",
+  "message.fasteat.no_slowdown.changed": "No slowdown has been set to %s.",
+
+  "message.fasteat.once_per_click": "Once per click: %s",
+  "message.fasteat.once_per_click.changed": "Once per click has been set to %s.",
+
+  "message.fasteat.enabled_text": "Enabled",
+  "message.fasteat.disabled_text": "Disabled",
+
+  "message.fasteat.actionbar": "FastEat: %s"
+}

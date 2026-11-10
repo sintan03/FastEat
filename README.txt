@@ -44,3 +44,10 @@ Community Documentation: https://docs.minecraftforge.net/en/1.20.1/gettingstarte
 LexManos' Install Video: https://youtu.be/8VEdtQLuLO0
 Forge Forums: https://forums.minecraftforge.net/
 Forge Discord: https://discord.minecraftforge.net/
+
+
+
+License
+-------
+This project is licensed under the MIT License.
+See the LICENSE.txt file for details.
