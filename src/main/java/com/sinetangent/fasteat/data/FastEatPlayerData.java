@@ -25,8 +25,8 @@ public class FastEatPlayerData {
 
         private boolean enabled = true;
 
-        private int eatDuration = 2;
-        private int drinkDuration = 2;
+        private int eatDuration = 1;
+        private int drinkDuration = 1;
 
         private boolean noSlowdown = true;
         private boolean consumeOncePerClick = true;

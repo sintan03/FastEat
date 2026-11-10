@@ -27,6 +27,7 @@ version="${mod_version}" #mandatory
 displayName="${mod_name}" #mandatory
 
 displayURL="https://github.com/sintan03/FastEat"
+logoFile="fasteat.png"
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
